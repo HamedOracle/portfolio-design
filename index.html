@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minimal Portfolio – Graphic Designer</title>
+  <link rel="preconnect" href="https://cdn.fontcdn.ir" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <style>
+    /* Peyda font (variable) */
+    @font-face {
+      font-family: "Peyda";
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url("https://cdn.fontcdn.ir/Font/Peyda/Peyda[wght].woff2") format("woff2");
+    }
+
+    :root {
+      --bg: #07090d;
+      --card: rgba(255, 255, 255, 0.06);
+      --card-strong: rgba(255, 255, 255, 0.12);
+      --accent: #7fffd4;
+      --accent-2: #6eb5ff;
+      --muted: #b3bcc7;
+      --text: #e8ecf2;
+      --radius: 22px;
+      color-scheme: dark;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Peyda", "Inter", system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 20% 20%, rgba(127, 255, 212, 0.08), transparent 25%),
+        radial-gradient(circle at 80% 0%, rgba(110, 181, 255, 0.1), transparent 28%),
+        linear-gradient(145deg, #06080c, #0a0f16 40%, #0b1019);
+      min-height: 100vh;
+      color: var(--text);
+      padding: 32px clamp(16px, 5vw, 42px);
+      overflow-x: hidden;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .halo {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.04), transparent 35%),
+        radial-gradient(circle at 30% 70%, rgba(127, 255, 212, 0.05), transparent 30%),
+        radial-gradient(circle at 80% 65%, rgba(110, 181, 255, 0.05), transparent 32%);
+      filter: blur(60px);
+      opacity: 0.85;
+      z-index: 0;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-bottom: 26px;
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .title-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      flex-direction: row-reverse;
+    }
+
+    .avatar {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .identity {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .badge {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(127, 255, 212, 0.18), rgba(110, 181, 255, 0.22));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      color: #03130e;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(32px, 4vw, 44px);
+      letter-spacing: -0.01em;
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      max-width: 800px;
+      line-height: 1.6;
+      font-size: 16px;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .tabs {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(8px);
+    }
+
+    .tab-btn {
+      border: none;
+      background: transparent;
+      color: var(--text);
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-family: "Peyda", "Inter", system-ui, -apple-system, sans-serif;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(127, 255, 212, 0.16), rgba(110, 181, 255, 0.18));
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+      color: #03130e;
+      font-weight: 700;
+    }
+
+    .section {
+      display: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section.active {
+      display: block;
+      animation: fadeIn 0.35s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius);
+      padding: clamp(18px, 3vw, 24px);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(16px);
+    }
+
+    .card + .card {
+      margin-top: 18px;
+    }
+
+    .about-hero {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      background: linear-gradient(155deg, rgba(127, 255, 212, 0.08), rgba(110, 181, 255, 0.05)) border-box,
+        var(--card);
+      border: 1px solid rgba(127, 255, 212, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-hero::after {
+      content: "";
+      position: absolute;
+      inset: 10% 12%;
+      background: radial-gradient(circle at 35% 35%, rgba(127, 255, 212, 0.08), transparent 45%),
+        radial-gradient(circle at 70% 70%, rgba(110, 181, 255, 0.08), transparent 50%);
+      filter: blur(45px);
+      opacity: 0.6;
+      z-index: 0;
+    }
+
+    .about-left,
+    .about-right {
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-left .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .about-headline {
+      font-size: clamp(22px, 3vw, 28px);
+      margin-bottom: 10px;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .about-copy {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 14px;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .stat {
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      min-width: 120px;
+    }
+
+    .stat-number {
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .about-right {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .tag-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .panel-mini {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(127, 255, 212, 0.08);
+      border: 1px solid rgba(127, 255, 212, 0.2);
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .stacked-panels {
+      display: grid;
+      gap: 10px;
+    }
+
+    .panel {
+      background: var(--card-strong);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 14px;
+      text-align: right;
+      direction: rtl;
+    }
+
+    .panel h3 {
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+
+    .panel p {
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      font-size: 13px;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    .pill strong {
+      color: var(--text);
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .section-title h2 {
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .gallery {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius);
+      padding: 12px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      backdrop-filter: blur(8px);
+    }
+
+    .gallery h3 {
+      margin-bottom: 10px;
+      font-size: 15px;
+      letter-spacing: 0.01em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .shot {
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      aspect-ratio: 4 / 3;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .shot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .shot:hover {
+      transform: translateY(-4px);
+      border-color: rgba(127, 255, 212, 0.4);
+      box-shadow: 0 14px 40px rgba(127, 255, 212, 0.15);
+    }
+
+    .cta-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: none;
+      cursor: pointer;
+      border-radius: 12px;
+      font-weight: 700;
+      padding: 12px 16px;
+      color: #03130e;
+      background: linear-gradient(135deg, rgba(127, 255, 212, 0.85), rgba(110, 181, 255, 0.85));
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.4);
+    }
+
+    .link {
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+      padding-bottom: 2px;
+    }
+
+    footer {
+      margin-top: 32px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 6, 10, 0.65);
+      backdrop-filter: blur(12px);
+      display: grid;
+      place-items: center;
+      z-index: 30;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      padding: 16px;
+    }
+
+    .modal.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      position: relative;
+      width: min(1200px, 94vw);
+      max-height: 90vh;
+      border-radius: 20px;
+      overflow: hidden;
+      background: rgba(10, 14, 20, 0.9);
+      border: 1px solid rgba(127, 255, 212, 0.25);
+      box-shadow: 0 30px 120px rgba(0, 0, 0, 0.55);
+    }
+
+    .modal-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      max-height: 90vh;
+      object-fit: contain;
+      background: #05070b;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: 700;
+      backdrop-filter: blur(6px);
+      transition: background 0.2s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(127, 255, 212, 0.14);
+    }
+
+    .blurred {
+      filter: blur(8px);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    @media (max-width: 640px) {
+      .about-hero {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+      .tag-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      }
+      .stat {
+        width: 100%;
+      }
+      .grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+      .gallery-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      body {
+        padding: 22px 14px 28px;
+      }
+      header {
+        margin-bottom: 18px;
+      }
+      .card {
+        padding: 16px;
+      }
+      .tabs {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+  <div class="halo"></div>
+  <header>
+    <div class="identity">
+      <span class="badge">طراح گرافیک</span>
+      <span class="badge" style="background: rgba(255,255,255,0.06); color: var(--text);">سبک مینیمال تیره / گلس</span>
+    </div>
+    <div class="title-row">
+      <h1>سلام، من <span style="color: var(--accent);">حامد</span> هستم</h1>
+      <div class="avatar">
+        <img src="pfp.png" alt="تصویر حامد" />
+      </div>
+    </div>
+    <p class="subtitle">
+      طراح گرافیک خلاق و جزئیات‌محور با تمرکز بر طراحی بصری مؤثر و هویت برند. دارای توانایی تبدیل ایده‌ها به طرح‌های
+      کاربردی و جذاب متناسب با نیاز مخاطب و هدف پروژه. مسلط به اصول طراحی، رنگ، تایپوگرافی و ترکیب‌بندی، با تجربه در
+      تولید محتوای گرافیکی برای فضای دیجیتال و چاپ. متعهد به کیفیت، ددلاین و ارتباط حرفه‌ای با کارفرما، با رویکردی
+      تحلیلی و نتیجه‌محور در اجرای پروژه‌ها.
+    </p>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="about">درباره من</button>
+      <button class="tab-btn" data-tab="designs">نمونه کارها</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="section active" id="about">
+      <div class="card about-hero">
+        <div class="about-left">
+          <div class="eyebrow">درباره من</div>
+          <h2 class="about-headline">مینیمال، جسور و ساخته‌شده برای وضوح.</h2>
+          <p class="about-copy">
+            سیستم‌های هویت بصری و دارایی‌های کمپین را طوری می‌سازم که در چاپ و دیجیتال شفاف و دقیق باقی بمانند.
+            ترکیب‌بندی مینیمال، تایپوگرافی جسور و کنتراست بالا، هر خروجی را هدفمند و هم‌راستا با برند نگه می‌کند.
+          </p>
+          <div class="stat-row">
+            <div class="stat">
+              <div class="stat-number">5+</div>
+              <div class="stat-label">سال تجربه طراحی</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number">30+</div>
+              <div class="stat-label">مجموعه برند و لوگو</div>
+            </div>
+          </div>
+          <div class="cta-row">
+            <a class="link" href="mailto:hddd1382@gmail.com">hddd1382@gmail.com</a>
+          </div>
+        </div>
+        <div class="about-right">
+          <div class="tag-grid">
+            <div class="tag">هویت برند</div>
+            <div class="tag">پکیج لوگو</div>
+            <div class="tag">ست تبلیغاتی</div>
+            <div class="tag">بنر شبکه اجتماعی</div>
+            <div class="tag">کاور</div>
+            <div class="tag">تصویرسازی</div>
+          </div>
+          <div class="panel-mini">
+            <span>روند کار</span>
+            <span>شناخت نیاز → جهت‌گیری بصری → تحویل نهایی</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card stacked-panels">
+        <div class="section-title">
+          <h2>خدمات</h2>
+          <div class="pill"><strong>در دسترس</strong> ریموت و حضوری</div>
+        </div>
+        <div class="panel">
+          <h3>سیستم هویت برند</h3>
+          <p>پکیج‌های لوگو، کیت هویت، قواعد رنگ و تایپ، و خروجی‌های آماده چاپ/دیجیتال.</p>
+          <div class="tag-row">
+            <span class="chip">پکیج لوگو</span>
+            <span class="chip">راهنمای برند</span>
+            <span class="chip">اوراق اداری</span>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>کمپین و پروموشن</h3>
+          <p>تبلیغات شبکه اجتماعی، بنر، تامبنیل و بصری‌های متمرکز بر تبدیل.</p>
+          <div class="tag-row">
+            <span class="chip">ست تبلیغاتی</span>
+            <span class="chip">بنر اصلی</span>
+            <span class="chip">ورژن A/B</span>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>تصویرسازی و کاور</h3>
+          <p>تصویرسازی ادیتوریال، آرت کاور و پوسترهای گرافیکی جذاب.</p>
+          <div class="tag-row">
+            <span class="chip">تصویرسازی</span>
+            <span class="chip">کاور آلبوم/محتوا</span>
+            <span class="chip">پوستر</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="designs">
+      <div class="card">
+        <div class="section-title">
+          <h2>نمونه کارها</h2>
+          <div class="pill"><strong>گلس</strong> برای پیش‌نمایش هاور کنید</div>
+        </div>
+
+        <div class="gallery">
+          <h3>لوگوها</h3>
+          <div class="gallery-grid">
+            <figure class="shot"><img src="designs/logo 1.jpg" alt="Logo design 1" /></figure>
+            <figure class="shot"><img src="designs/logo 2.png" alt="Logo design 2" /></figure>
+            <figure class="shot"><img src="designs/logo 3.png" alt="Logo design 3" /></figure>
+            <figure class="shot"><img src="designs/logo 4.png" alt="Logo design 4" /></figure>
+            <figure class="shot"><img src="designs/logo 5.png" alt="Logo design 5" /></figure>
+          </div>
+        </div>
+
+        <div class="gallery" style="margin-top: 14px;">
+          <h3>تبلیغات</h3>
+          <div class="gallery-grid">
+            <figure class="shot"><img src="designs/ads 1.png" alt="Ad design 1" /></figure>
+            <figure class="shot"><img src="designs/ads 2.png" alt="Ad design 2" /></figure>
+            <figure class="shot"><img src="designs/ads 3.png" alt="Ad design 3" /></figure>
+            <figure class="shot"><img src="designs/ads 4.png" alt="Ad design 4" /></figure>
+            <figure class="shot"><img src="designs/ads 5.png" alt="Ad design 5" /></figure>
+            <figure class="shot"><img src="designs/ads 6.png" alt="Ad design 6" /></figure>
+            <figure class="shot"><img src="designs/ads 7.jpg" alt="Ad design 7" /></figure>
+          </div>
+        </div>
+
+        <div class="gallery" style="margin-top: 14px;">
+          <h3>بنرها</h3>
+          <div class="gallery-grid">
+            <figure class="shot"><img src="designs/banner 1.jpg" alt="Banner design 1" /></figure>
+            <figure class="shot"><img src="designs/banner 2.jpg" alt="Banner design 2" /></figure>
+            <figure class="shot"><img src="designs/banner 3.jpg" alt="Banner design 3" /></figure>
+            <figure class="shot"><img src="designs/banner 4.jpg" alt="Banner design 4" /></figure>
+            <figure class="shot"><img src="designs/banner 5.jpg" alt="Banner design 5" /></figure>
+            <figure class="shot"><img src="designs/banner 6.jpg" alt="Banner design 6" /></figure>
+            <figure class="shot"><img src="designs/banner 7.jpg" alt="Banner design 7" /></figure>
+            <figure class="shot"><img src="designs/banner 8.jpg" alt="Banner design 8" /></figure>
+            <figure class="shot"><img src="designs/banner 9.jpg" alt="Banner design 9" /></figure>
+            <figure class="shot"><img src="designs/banner 10.jpg" alt="Banner design 10" /></figure>
+            <figure class="shot"><img src="designs/banner 11.jpg" alt="Banner design 11" /></figure>
+          </div>
+        </div>
+
+        <div class="gallery" style="margin-top: 14px;">
+          <h3>کاورها</h3>
+          <div class="gallery-grid">
+            <figure class="shot"><img src="designs/cover 1.jpg" alt="Cover design 1" /></figure>
+            <figure class="shot"><img src="designs/cover 2.jpg" alt="Cover design 2" /></figure>
+            <figure class="shot"><img src="designs/cover 3.jpg" alt="Cover design 3" /></figure>
+            <figure class="shot"><img src="designs/cover 4.jpg" alt="Cover design 4" /></figure>
+            <figure class="shot"><img src="designs/cover 5.jpg" alt="Cover design 5" /></figure>
+            <figure class="shot"><img src="designs/cover 6.jpg" alt="Cover design 6" /></figure>
+            <figure class="shot"><img src="designs/cover 7.png" alt="Cover design 7" /></figure>
+            <figure class="shot"><img src="designs/cover 8.jpg" alt="Cover design 8" /></figure>
+          </div>
+        </div>
+
+        <div class="gallery" style="margin-top: 14px;">
+          <h3>پوسترهای گرافیکی</h3>
+          <div class="gallery-grid">
+            <figure class="shot"><img src="designs/graphic poster 1.jpg" alt="Poster 1" /></figure>
+            <figure class="shot"><img src="designs/graphic poster 2.jpg" alt="Poster 2" /></figure>
+            <figure class="shot"><img src="designs/graphic poster 3.jpg" alt="Poster 3" /></figure>
+            <figure class="shot"><img src="designs/graphic poster 4.jpg" alt="Poster 4" /></figure>
+            <figure class="shot"><img src="designs/graphic poster 5.jpg" alt="Poster 5" /></figure>
+            <figure class="shot"><img src="designs/graphic poster 6.jpg" alt="Poster 6" /></figure>
+            <figure class="shot"><img src="designs/graphic poster 7.jpg" alt="Poster 7" /></figure>
+            <figure class="shot"><img src="designs/graphic poster 8.jpg" alt="Poster 8" /></figure>
+            <figure class="shot"><img src="designs/graphic poster 9.jpg" alt="Poster 9" /></figure>
+            <figure class="shot"><img src="designs/graphic poster 10.jpg" alt="Poster 10" /></figure>
+            <figure class="shot"><img src="designs/graphic poster 11.jpg" alt="Poster 11" /></figure>
+          </div>
+        </div>
+
+        <div class="gallery" style="margin-top: 14px;">
+          <h3>تصویرسازی</h3>
+          <div class="gallery-grid">
+            <figure class="shot"><img src="designs/illastration 1.jpg" alt="Illustration 1" /></figure>
+            <figure class="shot"><img src="designs/illastration 2.jpg" alt="Illustration 2" /></figure>
+          </div>
+        </div>
+
+        <div class="gallery" style="margin-top: 14px;">
+          <h3>محیط / محصول</h3>
+          <div class="gallery-grid">
+            <figure class="shot"><img src="designs/office 1.jpg" alt="Office visual 1" /></figure>
+            <figure class="shot"><img src="designs/office 2.jpg" alt="Office visual 2" /></figure>
+            <figure class="shot"><img src="designs/office 3.jpg" alt="Office visual 3" /></figure>
+            <figure class="shot"><img src="designs/office 4.jpg" alt="Office visual 4" /></figure>
+            <figure class="shot"><img src="designs/office 5.png" alt="Office visual 5" /></figure>
+            <figure class="shot"><img src="designs/office 6.png" alt="Office visual 6" /></figure>
+            <figure class="shot"><img src="designs/office 7.jpg" alt="Office visual 7" /></figure>
+          </div>
+        </div>
+
+        <div class="gallery" style="margin-top: 14px;">
+          <h3>تصاویر کوچک</h3>
+          <div class="gallery-grid">
+            <figure class="shot"><img src="designs/thumbnail 1.jpg" alt="Thumbnail 1" /></figure>
+            <figure class="shot"><img src="designs/thumbnail 2.jpg" alt="Thumbnail 2" /></figure>
+            <figure class="shot"><img src="designs/thumbnail 3.jpg" alt="Thumbnail 3" /></figure>
+            <figure class="shot"><img src="designs/thumbnail 4.jpg" alt="Thumbnail 4" /></figure>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    طراحی شده با سبک مینیمال تیره و گلس — با فونت پِیدا.
+  </footer>
+
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Close">×</button>
+      <img class="modal-img" src="" alt="Design preview" />
+    </div>
+  </div>
+
+  <script>
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const sections = document.querySelectorAll(".section");
+    const shots = document.querySelectorAll(".shot img");
+    const modal = document.getElementById("modal");
+    const modalImg = modal.querySelector(".modal-img");
+    const modalClose = modal.querySelector(".modal-close");
+    const page = document.querySelector(".page");
+
+    tabButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.tab;
+        tabButtons.forEach((b) => b.classList.toggle("active", b === btn));
+        sections.forEach((sec) => sec.classList.toggle("active", sec.id === target));
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    });
+
+    const openModal = (src, alt) => {
+      modalImg.src = src;
+      modalImg.alt = alt || "Design preview";
+      modal.classList.add("open");
+      page.classList.add("blurred");
+      document.body.style.overflow = "hidden";
+    };
+
+    const closeModal = () => {
+      modal.classList.remove("open");
+      page.classList.remove("blurred");
+      document.body.style.overflow = "";
+      modalImg.src = "";
+    };
+
+    shots.forEach((img) => {
+      img.addEventListener("click", () => openModal(img.src, img.alt));
+    });
+
+    modalClose.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("open")) closeModal();
+    });
+  </script>
+</body>
+</html>
+
